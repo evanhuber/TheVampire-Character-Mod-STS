@@ -19,7 +19,6 @@ import theVampire.util.TextureLoader;
 
 import static theVampire.DefaultMod.makePowerPath;
 
-//Gain 1 dex for the turn for each card played.
 
 public class HemorrhagePower extends AbstractPower implements CloneablePowerInterface {
     public AbstractCreature source;
@@ -29,8 +28,6 @@ public class HemorrhagePower extends AbstractPower implements CloneablePowerInte
     public static final String NAME = powerStrings.NAME;
     public static final String[] DESCRIPTIONS = powerStrings.DESCRIPTIONS;
 
-    // We create 2 new textures *Using This Specific Texture Loader* - an 84x84 image and a 32x32 one.
-    // There's a fallback "missing texture" image, so the game shouldn't crash if you accidentally put a non-existent file.
     private static final Texture tex84 = TextureLoader.getTexture(makePowerPath("placeholder_power84.png"));
     private static final Texture tex32 = TextureLoader.getTexture(makePowerPath("placeholder_power32.png"));
 
@@ -45,7 +42,6 @@ public class HemorrhagePower extends AbstractPower implements CloneablePowerInte
         type = PowerType.DEBUFF;
         isTurnBased = false;
 
-        // We load those txtures here.
         this.region128 = new TextureAtlas.AtlasRegion(tex84, 0, 0, 84, 84);
         this.region48 = new TextureAtlas.AtlasRegion(tex32, 0, 0, 32, 32);
 
@@ -64,7 +60,7 @@ public class HemorrhagePower extends AbstractPower implements CloneablePowerInte
         updateDescription();
     }
 
-
+// when attacked, gain one blood
     @Override
     public int onAttacked(DamageInfo info, int damageAmount) {
         AbstractCreature p = AbstractDungeon.player;
