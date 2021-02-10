@@ -1,0 +1,111 @@
+package theVampire.relics;
+
+import basemod.abstracts.CustomRelic;
+import com.badlogic.gdx.graphics.Texture;
+import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.ReduceCostAction;
+import com.megacrit.cardcrawl.actions.common.ReducePowerAction;
+import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.powers.DexterityPower;
+import com.megacrit.cardcrawl.powers.StrengthPower;
+import com.megacrit.cardcrawl.powers.VulnerablePower;
+import theVampire.DefaultMod;
+import theVampire.powers.BloodPower;
+import theVampire.powers.SPF50Power;
+import theVampire.util.TextureLoader;
+
+import static theVampire.DefaultMod.makeRelicOutlinePath;
+import static theVampire.DefaultMod.makeRelicPath;
+
+public class VampireNightDayRelic extends CustomRelic {
+
+    // ID, images, text.
+    public static final String ID = DefaultMod.makeID("VampireNightDayRelic");
+
+    private static final Texture IMG = TextureLoader.getTexture(makeRelicPath("placeholder_relic.png"));
+    private static final Texture OUTLINE = TextureLoader.getTexture(makeRelicOutlinePath("placeholder_relic.png"));
+
+    private int count;
+    private static boolean isNight;
+    private int cycleCount;
+    private boolean isAffected = true;
+    private boolean hasSunscreen = false;
+    public VampireNightDayRelic() {
+        super(ID, IMG, OUTLINE, RelicTier.STARTER, LandingSound.MAGICAL);
+    }
+
+    public static boolean getIsNight(){
+        return isNight;
+    }
+
+
+    @Override
+    public void atBattleStartPreDraw() {
+        flash();
+        this.isNight = false;
+        this.count = 0;
+        this.cycleCount = 0;
+    }
+
+    @Override
+    public void atTurnStart() {
+        AbstractPower spf = AbstractDungeon.player.getPower(SPF50Power.POWER_ID);
+        if (spf != null){ hasSunscreen = true; }
+        // Some checks for powers not yet implemented.
+        //AbstractPower power1 = AbstractDungeon.player.getPower(BatFormPower.POWER_ID);
+        //AbstractPower power2 = AbstractDungeon.player.getPower(WolfFormPower.POWER_ID);
+
+        //if (power1 != null || power2 != null) { isAffected = false;} // Certain Powers nullify the effects of night an day entirely. This checks for those powers.
+        this.count += 1;
+        if (this.count > 2) {
+            this.count = 1;
+            if (!this.isNight) { this.isNight = true; }
+            else { this.isNight = false; }
+        }
+
+        if (isAffected) {
+            if (!this.isNight && !this.hasSunscreen) { // Sunscreen nullifies the negatives of night, once.
+                if (this.cycleCount > 0 && count == 1) { // If this is not the first turn, and it is the beginning of day, remove any buffs from night.
+                    flash();
+
+                    AbstractDungeon.actionManager.addToBottom(new ReducePowerAction(
+                            AbstractDungeon.player, AbstractDungeon.player, StrengthPower.POWER_ID, 3)); // Remove Strength
+                    AbstractDungeon.actionManager.addToBottom(new ReducePowerAction(
+                            AbstractDungeon.player, AbstractDungeon.player, DexterityPower.POWER_ID, 3)); // Remove Dexterity
+
+                    this.cycleCount++;
+                }
+                AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(AbstractDungeon.player, AbstractDungeon.player,
+                        new VulnerablePower(AbstractDungeon.player, 1, false), 1)); // Apply Vulnerable during the day
+            }
+            else if (this.isNight) { // If it is night, Apply buffs.
+                if (count == 1) {
+                    flash();
+
+                    AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(AbstractDungeon.player, AbstractDungeon.player,
+                            new StrengthPower(AbstractDungeon.player, 3), 3));
+                    AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(AbstractDungeon.player, AbstractDungeon.player,
+                            new DexterityPower(AbstractDungeon.player, 3), 3));
+                }
+            }
+        }
+        isAffected = true; // reset the variable to force another check next turn start.
+        this.getUpdatedDescription();
+    }
+
+    // Description
+    @Override
+    public String getUpdatedDescription() {
+        if (!isNight) {
+            return DESCRIPTIONS[0] + DESCRIPTIONS[1];
+        }
+        else {
+            return DESCRIPTIONS[0] + DESCRIPTIONS[2];
+        }
+
+
+    }
+
+}
