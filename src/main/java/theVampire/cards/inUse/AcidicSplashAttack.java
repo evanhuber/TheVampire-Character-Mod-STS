@@ -13,7 +13,6 @@ import theVampire.characters.TheVampire;
 
 import static theVampire.DefaultMod.makeCardPath;
 
-// public class AcidicSplashAttack extends AbstractDynamicCard
 public class AcidicSplashAttack extends AbstractDynamicCard {
 
 
