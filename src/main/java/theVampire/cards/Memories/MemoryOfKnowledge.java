@@ -11,7 +11,6 @@ import theVampire.characters.TheVampire;
 
 import static theVampire.DefaultMod.makeCardPath;
 
-// public class MemoryOfKnowledge extends AbstractDynamicCard
 public class MemoryOfKnowledge extends AbstractDynamicCard {
 
 
@@ -19,8 +18,7 @@ public class MemoryOfKnowledge extends AbstractDynamicCard {
 
 
     public static final String ID = DefaultMod.makeID(MemoryOfKnowledge.class.getSimpleName());
-    public static final String IMG = makeCardPath("Attack.png");// "public static final String IMG = makeCardPath("MemoryOfKnowledge.png");
-    // This does mean that you will need to have an image with the same NAME as the card in your image folder for it to run correctly.
+    public static final String IMG = makeCardPath("Attack.png");
 
 
     // /TEXT DECLARATION/
