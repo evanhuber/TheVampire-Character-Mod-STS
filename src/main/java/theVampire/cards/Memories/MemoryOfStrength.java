@@ -11,7 +11,6 @@ import theVampire.characters.TheVampire;
 
 import static theVampire.DefaultMod.makeCardPath;
 
-// public class MemoryOfStrength extends AbstractDynamicCard
 public class MemoryOfStrength extends AbstractDynamicCard {
 
 
@@ -19,8 +18,7 @@ public class MemoryOfStrength extends AbstractDynamicCard {
 
 
     public static final String ID = DefaultMod.makeID(MemoryOfStrength.class.getSimpleName());
-    public static final String IMG = makeCardPath("Attack.png");// "public static final String IMG = makeCardPath("MemoryOfStrength.png");
-    // This does mean that you will need to have an image with the same NAME as the card in your image folder for it to run correctly.
+    public static final String IMG = makeCardPath("Attack.png");
 
 
     // /TEXT DECLARATION/
@@ -28,9 +26,9 @@ public class MemoryOfStrength extends AbstractDynamicCard {
 
     // STAT DECLARATION
 
-    private static final CardRarity RARITY = CardRarity.SPECIAL; //  Up to you, I like auto-complete on these
-    private static final CardTarget TARGET = CardTarget.SELF;  //   since they don't change much.
-    private static final CardType TYPE = CardType.SKILL;       //
+    private static final CardRarity RARITY = CardRarity.SPECIAL;
+    private static final CardTarget TARGET = CardTarget.SELF;  
+    private static final CardType TYPE = CardType.SKILL;       
     public static final CardColor COLOR = TheVampire.Enums.COLOR_GRAY;
 
     private static final int COST = 0;
